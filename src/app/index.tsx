@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Text, View, Button, Platform } from 'react-native';
+import { Text, View, Button, Platform, TextInput } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 
@@ -84,13 +84,13 @@ async function registerForPushNotificationsAsync() {
   }
 }
 
-export default function Index() {
+export default function App() {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(
     undefined
   );
 
-  const [title, setTile] = useState('');
+  const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [data, setData] = useState('');
 
@@ -123,7 +123,7 @@ export default function Index() {
 
   const handleSubmit = async () => {
     await sendPushNotification(expoPushToken, message)
-    setTile('')
+    setTitle('')
     setBody('')
     setData('')
   }
@@ -137,25 +137,34 @@ export default function Index() {
         <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
       </View>
 
-      <form onSubmit={handleSubmit}>
-        <input
+      <View>
+        <TextInput
           value={title}
-          onChange={(e) => (setTile(e.target.value))}
-          type="text" placeholder='enter your title' />
-        <input
+          onChangeText={setTitle}
+          placeholder="Entrer votre titre"
+        />
+
+
+        <TextInput
           value={body}
-          onChange={(e) => (setBody(e.target.value))}
-          type="text" placeholder='enter the body of notification' />
-        <input
+          onChangeText={setBody}
+          placeholder="Entrer votre body"
+        />
+
+        <TextInput
           value={data}
-          onChange={(e) => (setData(e.target.value))}
-          type="text" placeholder='enter the data' />
+          onChangeText={setData}
+          placeholder="Entrer votre daya"
+        />
 
-        <button type="submit">
-          Envoyer
-        </button>
-      </form>
 
+        <Button
+          title="Envoyer"
+          onPress={handleSubmit}
+        />
+
+
+      </View>
     </View>
   );
 }
